@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <context:component-scan base-package="gt.gob.mspas.seguridad.controller" />
+    <mvc:annotation-driven />
+        
+    <!--saho_consultas 192.168.50.83:5432   Otto    usr_hospitales
+    jdbc:sqlserver://SAHODB;databaseName=SAHO sigsaconsulta Consulta*2k
+    jdbc:sqlserver://OTTO-LENOVO\SALOMON_V2;databaseName=SAHO sa Admin@1-->
+
+    <!-- Configuración de QA -->
+    
+<!--    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://192.168.50.151:5432/db_seguridad_qa" />
+        <property name="username" value="sigsadesa" />
+        <property name="password" value="Sigsa2018" />
+    </bean>-->
+    
+    <!-- Configuración local-->
+    
+    
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://localhost/db-security-dev" />
+        <property name="username" value="postgres" />
+        <property name="password" value="123" />
+    </bean>
+    
+    
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                
+                <value>gt.gob.mspas.seguridad.entity.TcRedDeServicio</value>
+                <value>gt.gob.mspas.seguridad.entity.TcSaAccion</value>
+                <value>gt.gob.mspas.seguridad.entity.TcSaAplicacion</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaUsuarioAplicacionRol</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaAplicacionRol</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaBitacora</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaPersona</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaComponente</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaRolComponente</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaTipoUsuario</value>
+                <value>gt.gob.mspas.seguridad.entity.TtSaUsuario</value>
+                <value>gt.gob.mspas.seguridad.entity.TcSaRol</value>
+          
+
+
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="txManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    
+    <mvc:view-controller path="/" view-name="index"/>
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+     
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <!--//Imlementaciones ===========================================================================================-->
+    <bean id="aplicacionImpl" class="gt.gob.mspas.seguridad.impl.AplicacionImpl"></bean>
+    <bean id="componenteImpl" class="gt.gob.mspas.seguridad.impl.ComponenteImpl"></bean>
+    <bean id="rolImpl" class="gt.gob.mspas.seguridad.impl.RolImpl"></bean>
+    <bean id="usuarioImpl" class="gt.gob.mspas.seguridad.impl.UsuarioImpl"></bean>
+   
+</beans>
